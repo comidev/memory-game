@@ -1,40 +1,46 @@
 import { SIMBOLOS } from "data";
-import { createContext, useState } from "react";
+import { createContext, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Context = createContext();
 
 export function SimbolosProvider({ children }) {
-    const [simbolos, setSimbolos] = useState(SIMBOLOS);
-    const [simboloPrev, setSimboloPrev] = useState(null);
+    const [simbolos, setSimbolos] = useState([]);
     const [errores, setErrores] = useState(0);
     const [time, setTime] = useState();
     const navigate = useNavigate();
 
-    const incorrecto = () => setErrores((prev) => prev + 1);
+    const incorrecto = useCallback(() => setErrores((prev) => prev + 1), []);
 
-    const verificar = (timeStart) => {
-        const fin = simbolos.every((item) => item.show);
-        if (fin) {
-            const timeEnd = Date.now();
-            const timeSeg = (timeEnd - timeStart) / 1000;
-            setTime(timeSeg);
-            navigate("/results");
-        }
-    };
+    const exists = useCallback(
+        (id) => simbolos.some((item) => item.id === id),
+        [simbolos]
+    );
+
+    const addSimbolo = useCallback(
+        (simbolo, timeStart) => {
+            setSimbolos((prev) => prev.concat(simbolo));
+            const isFull = simbolos.length + 1 === SIMBOLOS.length / 2;
+            if (isFull) {
+                const timeEnd = Date.now();
+                const timeSeg = (timeEnd - timeStart) / 1000;
+                setTime(timeSeg);
+                navigate("/results");
+            }
+        },
+        [simbolos, navigate]
+    );
 
     return (
         <Context.Provider
             value={{
                 simbolos,
-                setSimbolos,
-                simboloPrev,
-                setSimboloPrev,
                 errores,
                 incorrecto,
                 time,
                 setTime,
-                verificar,
+                addSimbolo,
+                exists,
             }}>
             {children}
         </Context.Provider>

@@ -2,26 +2,15 @@ import { useContext } from "react";
 import SimbolosContext from "context/SimbolosProvider";
 
 export default function useSimbolos() {
-    const {
-        simbolos,
-        setSimbolos,
-        simboloPrev,
-        setSimboloPrev,
-        errores,
-        incorrecto,
-        time,
-        setTime,
-        verificar,
-    } = useContext(SimbolosContext);
+    const { simbolos, errores, incorrecto, time, setTime, addSimbolo, exists } =
+        useContext(SimbolosContext);
     return {
         simbolos,
-        setSimbolos,
-        simboloPrev,
-        setSimboloPrev,
         errores,
         incorrecto,
         time,
         setTime,
-        verificar,
+        addSimbolo,
+        exists,
     };
 }

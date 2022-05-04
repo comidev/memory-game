@@ -20,7 +20,7 @@ export const SimboloContainer = styled.div`
 
     @media (hover: hover) {
         &:hover {
-            transform: translateY(-5px);
+            transform: translateY(-3px);
         }
     }
 `;

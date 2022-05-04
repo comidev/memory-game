@@ -1,65 +1,71 @@
 import { Img, SimboloContainer } from "./styles";
 import oculto from "images/oculto.webp";
-import { useMemo, useState } from "react";
+import { useMemo, useState, memo, useCallback } from "react";
 import useSimbolos from "hooks/useSimbolos";
 
-const getHermano = (simbList, id) =>
-    simbList.filter((simb) => simb.id === id + 10 || simb.id === id - 10)[0];
-
-export default function Simbolo({ simbolo, index }) {
-    const {
-        simbolos,
-        setSimbolos,
-        simboloPrev,
-        setSimboloPrev,
-        incorrecto,
-        verificar,
-    } = useSimbolos();
-    const [showImg, setShowImg] = useState(simbolo.show);
-    const [correct, setCorrect] = useState("");
+function Simbolo({ simbolo, index, simboloPrev, setSimboloPrev }) {
+    const { incorrecto, addSimbolo, exists } = useSimbolos();
     const timeStart = useMemo(() => Date.now(), []);
+    const [showImg, setShowImg] = useState(false);
+    const [correct, setCorrect] = useState("");
 
-    const handleClick = () => {
-        const hermano = getHermano(simbolos, simbolo.id);
-        if (!(showImg && hermano.show)) {
-            setShowImg(true);
-            if (simboloPrev && simboloPrev.simbolo !== simbolo) {
-                if (simboloPrev.simbolo === hermano) {
-                    setCorrect("verdadero");
-                    simboloPrev.setCorrect("verdadero");
-
-                    const hermanoIndex = simbolos.indexOf(hermano);
-                    simbolos[hermanoIndex].show = true;
-                    simbolos[index].show = true;
-                    setTimeout(() => {
-                        setCorrect("");
-                        simboloPrev.setCorrect("");
-
-                        simboloPrev.setShowImg(true);
-
-                        setSimbolos(simbolos);
-                        verificar(timeStart);
-                    }, 1000);
-                } else {
-                    setCorrect("falso");
-                    simboloPrev.setCorrect("falso");
-
-                    setTimeout(() => {
-                        incorrecto();
-
-                        setCorrect("");
-                        simboloPrev.setCorrect("");
-
-                        simboloPrev.setShowImg(false);
-                        setShowImg(false);
-                    }, 1000);
+    const handleClick = useCallback(() => {
+        // Si aún no están en el arreglo
+        if (!exists(simbolo.id)) {
+            // Si ya se ha marcado algo
+            if (simboloPrev) {
+                // Si eso no es el mismo
+                if (simboloPrev.index !== index) {
+                    setShowImg(true);
+                    // Si es la pareja
+                    if (simboloPrev.id === simbolo.id) {
+                        setTimeout(() => {
+                            // Color verde
+                            setCorrect("verdadero");
+                            simboloPrev.setCorrect("verdadero");
+                        }, 600);
+                        setTimeout(() => {
+                            // Quitamos color
+                            setCorrect("");
+                            simboloPrev.setCorrect("");
+                            // Agregamos
+                            addSimbolo(simbolo, timeStart);
+                        }, 1100);
+                    } else {
+                        setTimeout(() => {
+                            // Color rojo
+                            setCorrect("falso");
+                            simboloPrev.setCorrect("falso");
+                        }, 600);
+                        setTimeout(() => {
+                            incorrecto();
+                            // Quitamos color
+                            setCorrect("");
+                            simboloPrev.setCorrect("");
+                            // Ocultamos imagen
+                            setShowImg(false);
+                            simboloPrev.setShowImg(false);
+                        }, 1100);
+                    }
+                    setSimboloPrev(null);
                 }
-                setSimboloPrev(null);
             } else {
-                setSimboloPrev({ simbolo, setShowImg, setCorrect });
+                setShowImg(true);
+                setSimboloPrev({ id: simbolo.id, index, setShowImg, setCorrect });
             }
         }
-    };
+    }, [
+        incorrecto,
+        exists,
+        addSimbolo,
+        index,
+        setCorrect,
+        setShowImg,
+        setSimboloPrev,
+        simbolo,
+        timeStart,
+        simboloPrev,
+    ]);
 
     return (
         <SimboloContainer onClick={handleClick} correct={correct}>
@@ -67,3 +73,9 @@ export default function Simbolo({ simbolo, index }) {
         </SimboloContainer>
     );
 }
+export default memo(Simbolo);
+
+/*
+{showImg ? <Img src={simbolo.img} /> : <Img src={oculto} />}
+<Img src={showImg ? simbolo.img : oculto} />
+*/

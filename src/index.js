@@ -21,9 +21,9 @@ root.render(
                         index
                         path="game"
                         element={
-                            <UserProtected>
+                            // <UserProtected>
                                 <Game />
-                            </UserProtected>
+                            // </UserProtected>
                         }
                     />
                     <Route

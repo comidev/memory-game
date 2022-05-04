@@ -1,16 +1,11 @@
-import Simbolo from "components/Simbolo";
-import useSimbolos from "hooks/useSimbolos";
+import ListOfSimbolos from "components/ListOfSimbolos";
 import { GameContainer, Simbolos } from "./styles";
 
 export default function Game() {
-    const { simbolos } = useSimbolos();
-
     return (
         <GameContainer>
             <Simbolos>
-                {simbolos.map((simbolo, index) => (
-                    <Simbolo key={index} simbolo={simbolo} index={index} />
-                ))}
+                <ListOfSimbolos />
             </Simbolos>
         </GameContainer>
     );
