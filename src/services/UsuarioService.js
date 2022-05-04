@@ -1,4 +1,4 @@
-const ENDPOINT = "http://localhost:8080/api/v0/users";
+const ENDPOINT = "https://memory-gama-api.herokuapp.com/api/v0/users";
 
 export const existsUsername = (username) => {
     return fetch(`${ENDPOINT}/${username}`).then((res) => {
