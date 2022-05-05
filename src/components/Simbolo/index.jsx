@@ -46,7 +46,7 @@ function Simbolo({ simbolo, index, simboloPrev, setSimboloPrev }) {
                                 }, 500);
                             }
                             setSimboloPrev(null);
-                        }, 500);
+                        }, 1500);
                     });
                 }
             } else {
