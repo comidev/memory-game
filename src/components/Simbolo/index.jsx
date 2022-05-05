@@ -18,35 +18,33 @@ function Simbolo({ simbolo, index, simboloPrev, setSimboloPrev }) {
                 if (simboloPrev.index !== index) {
                     setShowImg(true);
                     startTransition(() => {
-                        setTimeout(() => {
-                            // Si es la pareja
-                            if (simboloPrev.id === simbolo.id) {
-                                // Color verde
-                                setCorrect("verdadero");
-                                simboloPrev.setCorrect("verdadero");
-                                setTimeout(() => {
-                                    // Quitamos color
-                                    setCorrect("");
-                                    simboloPrev.setCorrect("");
-                                    // Agregamos
-                                    addSimbolo(simbolo, timeStart);
-                                }, 500);
-                            } else {
-                                // Color rojo
-                                setCorrect("falso");
-                                simboloPrev.setCorrect("falso");
-                                setTimeout(() => {
-                                    incorrecto();
-                                    // Quitamos color
-                                    setCorrect("");
-                                    simboloPrev.setCorrect("");
-                                    // Ocultamos imagen
-                                    setShowImg(false);
-                                    simboloPrev.setShowImg(false);
-                                }, 500);
-                            }
-                            setSimboloPrev(null);
-                        }, 1500);
+                        // Si es la pareja
+                        if (simboloPrev.id === simbolo.id) {
+                            // Color verde
+                            setCorrect("verdadero");
+                            simboloPrev.setCorrect("verdadero");
+                            setTimeout(() => {
+                                // Quitamos color
+                                setCorrect("");
+                                simboloPrev.setCorrect("");
+                                // Agregamos
+                                addSimbolo(simbolo, timeStart);
+                            }, 300);
+                        } else {
+                            // Color rojo
+                            setCorrect("falso");
+                            simboloPrev.setCorrect("falso");
+                            setTimeout(() => {
+                                incorrecto();
+                                // Quitamos color
+                                setCorrect("");
+                                simboloPrev.setCorrect("");
+                                // Ocultamos imagen
+                                setShowImg(false);
+                                simboloPrev.setShowImg(false);
+                            }, 300);
+                        }
+                        setSimboloPrev(null);
                     });
                 }
             } else {
