@@ -20,7 +20,7 @@ export const SimboloContainer = styled.div`
 
     @media (hover: hover) {
         &:hover {
-            transform: translateY(-3px);
+            transform: translateY(-1px);
         }
     }
 `;
@@ -29,4 +29,5 @@ export const Img = styled.img`
     width: 100%;
     height: 100%;
     object-fit: cover;
+    user-select: none;
 `;

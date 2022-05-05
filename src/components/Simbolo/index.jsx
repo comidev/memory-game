@@ -1,6 +1,6 @@
 import { Img, SimboloContainer } from "./styles";
 import oculto from "images/oculto.webp";
-import { useMemo, useState, memo, useCallback } from "react";
+import { useMemo, useState, memo, useCallback, startTransition } from "react";
 import useSimbolos from "hooks/useSimbolos";
 
 function Simbolo({ simbolo, index, simboloPrev, setSimboloPrev }) {
@@ -17,39 +17,48 @@ function Simbolo({ simbolo, index, simboloPrev, setSimboloPrev }) {
                 // Si eso no es el mismo
                 if (simboloPrev.index !== index) {
                     setShowImg(true);
-                    setTimeout(() => {
-                        // Si es la pareja
-                        if (simboloPrev.id === simbolo.id) {
-                            // Color verde
-                            setCorrect("verdadero");
-                            simboloPrev.setCorrect("verdadero");
-                            setTimeout(() => {
-                                // Quitamos color
-                                setCorrect("");
-                                simboloPrev.setCorrect("");
-                                // Agregamos
-                                addSimbolo(simbolo, timeStart);
-                            }, 500);
-                        } else {
-                            // Color rojo
-                            setCorrect("falso");
-                            simboloPrev.setCorrect("falso");
-                            setTimeout(() => {
-                                incorrecto();
-                                // Quitamos color
-                                setCorrect("");
-                                simboloPrev.setCorrect("");
-                                // Ocultamos imagen
-                                setShowImg(false);
-                                simboloPrev.setShowImg(false);
-                            }, 500);
-                        }
-                        setSimboloPrev(null);
-                    }, 700);
+                    startTransition(() => {
+                        setTimeout(() => {
+                            // Si es la pareja
+                            if (simboloPrev.id === simbolo.id) {
+                                // Color verde
+                                setCorrect("verdadero");
+                                simboloPrev.setCorrect("verdadero");
+                                setTimeout(() => {
+                                    // Quitamos color
+                                    setCorrect("");
+                                    simboloPrev.setCorrect("");
+                                    // Agregamos
+                                    addSimbolo(simbolo, timeStart);
+                                }, 500);
+                            } else {
+                                // Color rojo
+                                setCorrect("falso");
+                                simboloPrev.setCorrect("falso");
+                                setTimeout(() => {
+                                    incorrecto();
+                                    // Quitamos color
+                                    setCorrect("");
+                                    simboloPrev.setCorrect("");
+                                    // Ocultamos imagen
+                                    setShowImg(false);
+                                    simboloPrev.setShowImg(false);
+                                }, 500);
+                            }
+                            setSimboloPrev(null);
+                        }, 500);
+                    });
                 }
             } else {
                 setShowImg(true);
-                setSimboloPrev({ id: simbolo.id, index, setShowImg, setCorrect });
+                startTransition(() => {
+                    setSimboloPrev({
+                        id: simbolo.id,
+                        index,
+                        setShowImg,
+                        setCorrect,
+                    });
+                });
             }
         }
     }, [
