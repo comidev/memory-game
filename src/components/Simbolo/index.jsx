@@ -17,37 +17,35 @@ function Simbolo({ simbolo, index, simboloPrev, setSimboloPrev }) {
                 // Si eso no es el mismo
                 if (simboloPrev.index !== index) {
                     setShowImg(true);
-                    // Si es la pareja
-                    if (simboloPrev.id === simbolo.id) {
-                        setTimeout(() => {
+                    setTimeout(() => {
+                        // Si es la pareja
+                        if (simboloPrev.id === simbolo.id) {
                             // Color verde
                             setCorrect("verdadero");
                             simboloPrev.setCorrect("verdadero");
-                        }, 600);
-                        setTimeout(() => {
-                            // Quitamos color
-                            setCorrect("");
-                            simboloPrev.setCorrect("");
-                            // Agregamos
-                            addSimbolo(simbolo, timeStart);
-                        }, 1100);
-                    } else {
-                        setTimeout(() => {
+                            setTimeout(() => {
+                                // Quitamos color
+                                setCorrect("");
+                                simboloPrev.setCorrect("");
+                                // Agregamos
+                                addSimbolo(simbolo, timeStart);
+                            }, 500);
+                        } else {
                             // Color rojo
                             setCorrect("falso");
                             simboloPrev.setCorrect("falso");
-                        }, 600);
-                        setTimeout(() => {
-                            incorrecto();
-                            // Quitamos color
-                            setCorrect("");
-                            simboloPrev.setCorrect("");
-                            // Ocultamos imagen
-                            setShowImg(false);
-                            simboloPrev.setShowImg(false);
-                        }, 1100);
-                    }
-                    setSimboloPrev(null);
+                            setTimeout(() => {
+                                incorrecto();
+                                // Quitamos color
+                                setCorrect("");
+                                simboloPrev.setCorrect("");
+                                // Ocultamos imagen
+                                setShowImg(false);
+                                simboloPrev.setShowImg(false);
+                            }, 500);
+                        }
+                        setSimboloPrev(null);
+                    }, 700);
                 }
             } else {
                 setShowImg(true);
