@@ -1,4 +1,4 @@
-import { Img, SimboloContainer } from "./styles";
+import { ImgAbierto, ImgOculto, SimboloContainer } from "./styles";
 import oculto from "images/oculto.webp";
 import { useMemo, useState, memo, useCallback, startTransition } from "react";
 import useSimbolos from "hooks/useSimbolos";
@@ -10,6 +10,7 @@ function Simbolo({ simbolo, index, simboloPrev, setSimboloPrev }) {
     const [correct, setCorrect] = useState("");
 
     const handleClick = useCallback(() => {
+        console.log("Tocaste :3");
         // Si aún no están en el arreglo
         if (!exists(simbolo.id)) {
             // Si ya se ha marcado algo
@@ -29,7 +30,7 @@ function Simbolo({ simbolo, index, simboloPrev, setSimboloPrev }) {
                                 simboloPrev.setCorrect("");
                                 // Agregamos
                                 addSimbolo(simbolo, timeStart);
-                            }, 300);
+                            }, 500);
                         } else {
                             // Color rojo
                             setCorrect("falso");
@@ -42,7 +43,7 @@ function Simbolo({ simbolo, index, simboloPrev, setSimboloPrev }) {
                                 // Ocultamos imagen
                                 setShowImg(false);
                                 simboloPrev.setShowImg(false);
-                            }, 300);
+                            }, 500);
                         }
                         setSimboloPrev(null);
                     });
@@ -74,13 +75,9 @@ function Simbolo({ simbolo, index, simboloPrev, setSimboloPrev }) {
 
     return (
         <SimboloContainer onClick={handleClick} correct={correct}>
-            <Img src={showImg ? simbolo.img : oculto} />
+            <ImgAbierto src={simbolo.img} />
+            <ImgOculto opacity={showImg ? "0" : "1"} src={oculto} />
         </SimboloContainer>
     );
 }
 export default memo(Simbolo);
-
-/*
-{showImg ? <Img src={simbolo.img} /> : <Img src={oculto} />}
-<Img src={showImg ? simbolo.img : oculto} />
-*/
